@@ -2,9 +2,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.jitsi</groupId>
-    <artifactId>libjitsi-vpx</artifactId>
+    <artifactId>jnvpx</artifactId>
     <packaging>so</packaging>
-    <version>3.0</version>
+    <version>1.2.0</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -28,12 +28,25 @@
                 <version>1.0-alpha-8</version>
                 <extensions>true</extensions>
                 <configuration>
+                    <!--   trigger javah  -->
+                    <javahOS>linux</javahOS>
                     <sources>
                         <source>
                             <directory>src/main/c</directory>
                             <includes>
                                 <include>*.c</include>
+                                <include>*.cc</include>
+                                <include>*.h</include>
+                                <include>*.hh</include>
                             </includes>
+                        </source>
+                        <source>
+                            <directory>./libvpx/</directory>
+                            <dependencyAnalysisParticipation>false</dependencyAnalysisParticipation>
+                        </source>
+                        <source>
+                            <directory>./libvpx/libmkv</directory>
+                            <dependencyAnalysisParticipation>false</dependencyAnalysisParticipation>
                         </source>
                         <source>
                             <directory>${env.JAVA_HOME}/include</directory>
@@ -44,19 +57,17 @@
                             <dependencyAnalysisParticipation>false</dependencyAnalysisParticipation>
                         </source>
                     </sources>
-
                     <compilerProvider>generic-classic</compilerProvider>
                     <compilerExecutable>gcc</compilerExecutable>
                     <compilerStartOptions>
-                        <compilerStartOption>-O3 -Wall -c -fPIC -fmessage-length=0 -DLINUX</compilerStartOption>
+                        <compilerStartOption>-O2 -Wall -fPIC -D_JNI_IMPLEMENTATION_ -m64</compilerStartOption>
                     </compilerStartOptions>
-
                     <linkerProvider>generic-classic</linkerProvider>
                     <linkerExecutable>gcc</linkerExecutable>
                     <linkerStartOptions>
-                        <linkerStartOption>-shared</linkerStartOption>
+                        <linkerStartOption>-shared -m64 -Wl,-z,relro -lvpx</linkerStartOption>
+                        <linkerEndOptions>-lstdc++ -olibjnvpx.so</linkerEndOptions>
                     </linkerStartOptions>
-
                 </configuration>
             </plugin>
         </plugins>
