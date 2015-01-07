@@ -42,11 +42,13 @@
                         </source>
                         <source>
                             <directory>./libvpx/</directory>
-                            <dependencyAnalysisParticipation>false</dependencyAnalysisParticipation>
+                            <!-- TODO I don't know, maybe this needed -->
+                            <!--<dependencyAnalysisParticipation>false</dependencyAnalysisParticipation>-->
                         </source>
                         <source>
                             <directory>./libvpx/libmkv</directory>
-                            <dependencyAnalysisParticipation>false</dependencyAnalysisParticipation>
+                            <!-- TODO I don't know, maybe this needed -->
+                            <!--<dependencyAnalysisParticipation>false</dependencyAnalysisParticipation>-->
                         </source>
                         <source>
                             <directory>${env.JAVA_HOME}/include</directory>

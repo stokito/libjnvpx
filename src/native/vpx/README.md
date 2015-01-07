@@ -1,26 +1,37 @@
-# Building libjnvpx
+# libjnvpx JNI
 
-## Debian
+[libxpx](http://www.webmproject.org/) is a library supported by Google that working with codecs VP8 and VP9.
+
+**NOTE** This project should be merged with official [JNI binding](https://code.google.com/p/webm/source/browse/?repo=bindings)
+
+
+## Debian \ Ubuntu
 
 ### Install libvpx
+
 ```
 apt-get install libvpx-dev
 ```
 
-### Clone the libvpx repo, because of the libmkv code
+### Getting libvpx sources
+
+Clone the libvpx repo, because of the libmkv code
+
 ```
 git clone https://chromium.googlesource.com/webm/libvpx
 ```
 
 ### Install a jdk and set the JAVA_HOME variable
+
 ```
-apt-get install default-jdk
+sudo apt-get install default-jdk
 export JAVA_HOME=/usr/lib/jvm/default-java/
 ```
 
 ### Build the libjitsi code with the libvpx-debian ant target
+
 ```
-ant libvpx -Dlibmkv=/path/to/libvpx/third_party/libmkv
+ant libvpx-debian -Dlibmkv=/path/to/libvpx/third_party/libmkv
 ```
 
 
@@ -29,6 +40,7 @@ ant libvpx -Dlibmkv=/path/to/libvpx/third_party/libmkv
 ### Build libvpx
 
 #### Get the code
+
 ```
 git clone https://chromium.googlesource.com/webm/libvpx
 ```
@@ -36,6 +48,7 @@ git clone https://chromium.googlesource.com/webm/libvpx
 #### Configure:
 
 ##### Mac
+
 ```
 ./configure --enable-pic --disable-examples --disable-docs --enable-vp8
     --disable-vp9 --enable-error-concealment --enable-realtime-only
@@ -46,20 +59,21 @@ git clone https://chromium.googlesource.com/webm/libvpx
 If there are errors while linking on linux x86_64 try to add --extra-cflags='-fvisibility=protected'
 
 #### Make:
+
 ```
 make
 ```
 
 ### Build the libjitsi code with the libvpx ant target
-Run the 'libvpx' ant target from the 'libjitsi/' directory, setting the 'libvpx'
-property. 
+Run the `libvpx` ant target from the `libjitsi/` directory, setting the `libvpx` property.
 
 ```
 libjitsi/ $ ant libvpx -Dlibvpx=/path/to/libvpx/sources
 ```
 
 ### Alternatively, you can build manually with something like (on mac)
-```
+
+```sh
 gcc -Wall -fPIC -O2 -arch i386 -arch x86_64 \
 -I/Applications/Xcode.app//Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/JavaVM.framework/Versions/A/Headers/ \
 -I/Users/boris/jitsi/src/libvpx/ \
