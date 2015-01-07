@@ -1,0 +1,4 @@
+[submodule "src/native/vpx/libvpx"]
+	path = src/native/vpx/libvpx
+	url = https://chromium.googlesource.com/webm/libvpx
+	branch = v1.2.0
