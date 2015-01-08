@@ -2,3 +2,6 @@
 	path = libvpx
 	url = https://chromium.googlesource.com/webm/libvpx
 	branch = v1.2.0
+[submodule "webm.bindings/webm.bindings"]
+	path = webm.bindings/webm.bindings
+	url = https://code.google.com/p/webm.bindings/
