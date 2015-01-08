@@ -4,6 +4,15 @@
 
 **NOTE** This project should be merged with official [JNI binding](https://code.google.com/p/webm/source/browse/?repo=bindings)
 
+# How to build with Maven
+
+```
+cd libvpx
+git submodule update --init --recursive
+mvn install
+```
+
+# OLD instructions obsoletes
 
 ## Debian \ Ubuntu
 
