@@ -4,137 +4,102 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.jitsi</groupId>
     <artifactId>libjnvpx</artifactId>
-    <packaging>so</packaging>
+    <packaging>nar</packaging>
     <version>1.2.0</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <architecture.option/>
+        <debug.option/>
+        <java.os.include/>
+        <skipTests>true</skipTests>
+        <subsystem.option/>
     </properties>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <fork>true</fork>
+                    <compilerVersion>1.6</compilerVersion>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.github.maven-nar</groupId>
+                <artifactId>nar-maven-plugin</artifactId>
+                <version>3.2.0</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <c>
+                        <name>gcc</name>
+                        <includes>
+                            <include>**/*.c</include>
+                            <include>**/*.cc</include>
+                            <include>**/*.h</include>
+                            <include>**/*.hh</include>
+                        </includes>
+                        <options>
+                            <option>-I${env.JAVA_HOME}/include</option>
+                            <option>-I${project.basedir}/libvpx/</option>
+                            <option>-I${project.basedir}/libvpx/libmkv/..</option>
+                            <option>${java.os.include}</option>
+                            <option>${architecture.option}</option>
+                            <option>${subsystem.option}</option>
+                            <option>${debug.option}</option>
+                        </options>
+                    </c>
+                    <linker>
+                        <name>gcc</name>
+                        <options>
+                            <option>${architecture.option}</option>
+                            <option>${subsystem.option}</option>
+                            <option>-Wl,-z,relro</option>
+                        </options>
+                        <sysLibs>
+                            <sysLib>
+                                <name>vpx</name>
+                            </sysLib>
+                        </sysLibs>
+                    </linker>
+                    <java>
+                        <include>true</include>
+                    </java>
+                    <!--<javah>-->
+                    <!--<excludes>-->
+                    <!--<exclude>**/ModuleJNI.class</exclude>-->
+                    <!--</excludes>-->
+                    <!--</javah>-->
+                    <libraries>
+                        <library>
+                            <type>jni</type>
+                            <narSystemPackage>org.jitsi</narSystemPackage>
+                        </library>
+                    </libraries>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
     <profiles>
         <profile>
-            <id>linux-amd64</id>
+            <id>amd64-Linux</id>
             <activation>
                 <os>
-                    <name>linux</name>
+                    <name>Linux</name>
                     <arch>amd64</arch>
                 </os>
             </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>native-maven-plugin</artifactId>
-                        <version>1.0-alpha-8</version>
-                        <extensions>true</extensions>
-                        <configuration>
-                            <!--   trigger javah  -->
-                            <javahOS>linux</javahOS>
-                            <sources>
-                                <source>
-                                    <directory>src/main/c</directory>
-                                    <includes>
-                                        <include>*.c</include>
-                                        <include>*.cc</include>
-                                        <include>*.h</include>
-                                        <include>*.hh</include>
-                                    </includes>
-                                </source>
-                                <source>
-                                    <directory>./libvpx/</directory>
-                                    <!-- TODO I don't know, maybe this needed -->
-                                    <!--<dependencyAnalysisParticipation>false</dependencyAnalysisParticipation>-->
-                                </source>
-                                <source>
-                                    <directory>./libvpx/libmkv</directory>
-                                    <!-- TODO I don't know, maybe this needed -->
-                                    <!--<dependencyAnalysisParticipation>false</dependencyAnalysisParticipation>-->
-                                </source>
-                                <source>
-                                    <directory>${env.JAVA_HOME}/include</directory>
-                                    <dependencyAnalysisParticipation>false</dependencyAnalysisParticipation>
-                                </source>
-                                <source>
-                                    <directory>${env.JAVA_HOME}/include/linux</directory>
-                                    <dependencyAnalysisParticipation>false</dependencyAnalysisParticipation>
-                                </source>
-                            </sources>
-                            <compilerProvider>generic-classic</compilerProvider>
-                            <compilerExecutable>gcc</compilerExecutable>
-                            <compilerStartOptions>
-                                <compilerStartOption>-O2 -Wall -fPIC -D_JNI_IMPLEMENTATION_ -m64</compilerStartOption>
-                            </compilerStartOptions>
-                            <linkerProvider>generic-classic</linkerProvider>
-                            <linkerExecutable>gcc</linkerExecutable>
-                            <linkerStartOptions>
-                                <linkerStartOption>-shared -m64 -Wl,-z,relro -lvpx</linkerStartOption>
-                                <linkerEndOptions>-lstdc++ -olibjnvpx.so</linkerEndOptions>
-                            </linkerStartOptions>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
+            <properties>
+                <architecture.option>-m64</architecture.option>
+            </properties>
         </profile>
         <profile>
-            <id>linux-x86</id>
-            <activation>
-                <os>
-                    <name>linux</name>
-                    <arch>x86</arch>
-                </os>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>native-maven-plugin</artifactId>
-                        <version>1.0-alpha-8</version>
-                        <extensions>true</extensions>
-                        <configuration>
-                            <!--   trigger javah  -->
-                            <javahOS>linux</javahOS>
-                            <sources>
-                                <source>
-                                    <directory>src/main/c</directory>
-                                    <includes>
-                                        <include>*.c</include>
-                                        <include>*.cc</include>
-                                        <include>*.h</include>
-                                        <include>*.hh</include>
-                                    </includes>
-                                </source>
-                                <source>
-                                    <directory>./libvpx/</directory>
-                                    <!-- TODO I don't know, maybe this needed -->
-                                    <!--<dependencyAnalysisParticipation>false</dependencyAnalysisParticipation>-->
-                                </source>
-                                <source>
-                                    <directory>./libvpx/libmkv</directory>
-                                    <!-- TODO I don't know, maybe this needed -->
-                                    <!--<dependencyAnalysisParticipation>false</dependencyAnalysisParticipation>-->
-                                </source>
-                                <source>
-                                    <directory>${env.JAVA_HOME}/include</directory>
-                                    <dependencyAnalysisParticipation>false</dependencyAnalysisParticipation>
-                                </source>
-                                <source>
-                                    <directory>${env.JAVA_HOME}/include/linux</directory>
-                                    <dependencyAnalysisParticipation>false</dependencyAnalysisParticipation>
-                                </source>
-                            </sources>
-                            <compilerProvider>generic-classic</compilerProvider>
-                            <compilerExecutable>gcc</compilerExecutable>
-                            <compilerStartOptions>
-                                <compilerStartOption>-O2 -Wall -fPIC -D_JNI_IMPLEMENTATION_ -m32</compilerStartOption>
-                            </compilerStartOptions>
-                            <linkerProvider>generic-classic</linkerProvider>
-                            <linkerExecutable>gcc</linkerExecutable>
-                            <linkerStartOptions>
-                                <linkerStartOption>-shared -m32 -Wl,-z,relro -lvpx</linkerStartOption>
-                                <linkerEndOptions>-lstdc++ -olibjnvpx.so</linkerEndOptions>
-                            </linkerStartOptions>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
+            <id>debug</id>
+            <properties>
+                <debug.option>-g</debug.option>
+            </properties>
         </profile>
     </profiles>
 </project>
