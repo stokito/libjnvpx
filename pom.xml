@@ -42,9 +42,8 @@
                             <include>**/*.hh</include>
                         </includes>
                         <options>
-                            <option>-I${env.JAVA_HOME}/include</option>
                             <option>-I${project.basedir}/libvpx/</option>
-                            <option>-I${project.basedir}/libvpx/libmkv/..</option>
+                            <option>-I${project.basedir}/libvpx/libmkv/</option>
                             <option>${java.os.include}</option>
                             <option>${architecture.option}</option>
                             <option>${subsystem.option}</option>
@@ -58,24 +57,21 @@
                             <option>${subsystem.option}</option>
                             <option>-Wl,-z,relro</option>
                         </options>
-                        <sysLibs>
-                            <sysLib>
+                        <libs>
+                            <lib>
                                 <name>vpx</name>
-                            </sysLib>
-                        </sysLibs>
+                                <type>static</type>
+                                <directory>${project.basedir}/libvpx/</directory>
+                            </lib>
+                        </libs>
                     </linker>
                     <java>
                         <include>true</include>
                     </java>
-                    <!--<javah>-->
-                    <!--<excludes>-->
-                    <!--<exclude>**/ModuleJNI.class</exclude>-->
-                    <!--</excludes>-->
-                    <!--</javah>-->
                     <libraries>
                         <library>
                             <type>jni</type>
-                            <narSystemPackage>org.jitsi</narSystemPackage>
+                            <linkCPP>true</linkCPP>
                         </library>
                     </libraries>
                 </configuration>
